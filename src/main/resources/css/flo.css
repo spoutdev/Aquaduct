@@ -1,0 +1,11 @@
+#server-list {
+	width: 50%;
+}
+
+#server-list td {
+	padding: 5px;
+}
+
+#server-list > tbody > tr > td > span.label {
+	font-size: inherit;
+}
