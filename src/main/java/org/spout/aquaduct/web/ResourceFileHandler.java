@@ -35,7 +35,7 @@ import com.narrowtux.blueberry.http.headers.HttpStatusCode;
 public class ResourceFileHandler extends HttpRequestHandler {
 	private static int BUFFER_SIZE = 512;
 	private static String BASE_PATH = "src/main/resources/"; // TODO configuration
-	private static MimetypesFileTypeMap MIMETYPES = new MimetypesFileTypeMap();
+	private static final MimetypesFileTypeMap MIMETYPES = new MimetypesFileTypeMap();
 
 	static {
 		MIMETYPES.addMimeTypes("application/javascript js JS");

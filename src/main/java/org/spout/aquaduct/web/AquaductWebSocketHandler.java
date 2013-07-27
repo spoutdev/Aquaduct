@@ -22,40 +22,39 @@ package org.spout.aquaduct.web;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-
 import com.narrowtux.blueberry.websockets.Frame;
 import com.narrowtux.blueberry.websockets.TextFrame;
 import com.narrowtux.blueberry.websockets.WebSocketExchange;
 import com.narrowtux.blueberry.websockets.WebSocketRequestHandler;
 
 public class AquaductWebSocketHandler extends WebSocketRequestHandler {
+
 	private HashSet<WebSocketExchange> connectedClients = new HashSet<WebSocketExchange>();
 	private static final Gson GSON = new Gson();
 	private HashMap<String, WebClientRequestHandler> requestHandlers = new HashMap<String, WebClientRequestHandler>();
-
 	private int countup = 1;
-	private Timer timer = new Timer();
+	private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
 	public AquaductWebSocketHandler() {
 		super();
 		setFilter("/websocket/");
 
-		timer.schedule(new TimerTask() {
+		scheduler.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
-				countup ++;
-				WebClientFrame event  = new WebClientEvent("counter", countup);
+				countup++;
+				WebClientFrame event = new WebClientEvent("counter", countup);
 				sendEvent(event);
 			}
-		}, 100, 1000);
+		}, 100, 1000, TimeUnit.MILLISECONDS);
 	}
 
 	public void sendEvent(WebClientFrame event) {
@@ -64,7 +63,7 @@ public class AquaductWebSocketHandler extends WebSocketRequestHandler {
 	}
 
 	private void sendToClients(Frame frame) {
-		for (WebSocketExchange ex:connectedClients) {
+		for (WebSocketExchange ex : connectedClients) {
 			try {
 				ex.sendFrame(frame);
 			} catch (IOException e) {
@@ -75,7 +74,7 @@ public class AquaductWebSocketHandler extends WebSocketRequestHandler {
 
 	@Override
 	public void onConnect(WebSocketExchange exchange) throws IOException {
-		sendToClients(new TextFrame("Client with ip "+ exchange.getHttpExchange().getRequestingAddress().toString()+" connected!"));
+		sendToClients(new TextFrame("Client with ip " + exchange.getHttpExchange().getRequestingAddress().toString() + " connected!"));
 		connectedClients.add(exchange);
 		System.out.println("Client connected!");
 	}
@@ -92,8 +91,8 @@ public class AquaductWebSocketHandler extends WebSocketRequestHandler {
 			WebClientRequestHandler handler = requestHandlers.get(requestType);
 			WebClientResponse response;
 			if (handler == null) {
-				JsonObject object =  new JsonObject();
-				object.add("error", new JsonPrimitive("No request handler found for "+requestType));
+				JsonObject object = new JsonObject();
+				object.add("error", new JsonPrimitive("No request handler found for " + requestType));
 				response = new WebClientResponse(requestId, object);
 			} else {
 				Object replyData = handler.getResponse(requestType, data);
@@ -107,7 +106,7 @@ public class AquaductWebSocketHandler extends WebSocketRequestHandler {
 	@Override
 	public void onClose(WebSocketExchange exchange) throws IOException {
 		connectedClients.remove(exchange);
-		sendToClients(new TextFrame("Client with ip "+ exchange.getHttpExchange().getRequestingAddress().toString()+" disconnected!"));
+		sendToClients(new TextFrame("Client with ip " + exchange.getHttpExchange().getRequestingAddress().toString() + " disconnected!"));
 		System.out.println("Client disconnected!");
 	}
 

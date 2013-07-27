@@ -20,13 +20,14 @@
 package org.spout.aquaduct;
 
 import java.io.File;
+
 import org.spout.cereal.config.ConfigurationException;
 import org.spout.cereal.config.ConfigurationHolder;
 import org.spout.cereal.config.ConfigurationHolderConfiguration;
 import org.spout.cereal.config.yaml.YamlConfiguration;
 
-
 public class AquaductConfiguration extends ConfigurationHolderConfiguration {
+
 	public static ConfigurationHolder BIND_ADDRESS = new ConfigurationHolder((Object) null, "bind.address");
 	public static ConfigurationHolder BIND_PORT = new ConfigurationHolder(80, "bind.port");
 	public static ConfigurationHolder BASE_SERVER_FOLDER = new ConfigurationHolder("servers/", "servers.basefolder");
