@@ -22,10 +22,9 @@ package org.spout.aquaduct;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.spout.api.exception.ConfigurationException;
-
 import org.spout.aquaduct.server.Server;
 import org.spout.aquaduct.web.AquaductWebServer;
+import org.spout.cereal.config.ConfigurationException;
 
 public class Aquaduct {
 	private static Aquaduct instance = null;

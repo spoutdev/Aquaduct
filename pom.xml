@@ -15,7 +15,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<currentYear>2013</currentYear>
-		<spoutVersion>dev-SNAPSHOT</spoutVersion>
+		<spoutVersion>1.0.0-SNAPSHOT</spoutVersion>
 		<blueberryVersion>0.0.1-SNAPSHOT</blueberryVersion>
 		<buildNumber>custom</buildNumber>
 	</properties>
@@ -93,7 +93,7 @@
 		<!-- Provided by third-party -->
 		<dependency>
 			<groupId>org.spout</groupId>
-			<artifactId>spoutapi</artifactId>
+			<artifactId>spout-api</artifactId>
 			<version>${spoutVersion}</version>
 			<scope>provided</scope>
 		</dependency>
