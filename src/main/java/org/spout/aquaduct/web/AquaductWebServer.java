@@ -19,12 +19,10 @@
  */
 package org.spout.aquaduct.web;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import com.narrowtux.blueberry.Address;
 import com.narrowtux.blueberry.BlueberryWebServer;
-
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import org.spout.aquaduct.AquaductConfiguration;
 
 public class AquaductWebServer {

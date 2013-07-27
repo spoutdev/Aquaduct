@@ -19,22 +19,20 @@
  */
 package org.spout.aquaduct.web;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-
 import com.narrowtux.blueberry.websockets.Frame;
 import com.narrowtux.blueberry.websockets.TextFrame;
 import com.narrowtux.blueberry.websockets.WebSocketExchange;
 import com.narrowtux.blueberry.websockets.WebSocketRequestHandler;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class AquaductWebSocketHandler extends WebSocketRequestHandler {
 	private HashSet<WebSocketExchange> connectedClients = new HashSet<WebSocketExchange>();
@@ -42,20 +40,24 @@ public class AquaductWebSocketHandler extends WebSocketRequestHandler {
 	private HashMap<String, WebClientRequestHandler> requestHandlers = new HashMap<String, WebClientRequestHandler>();
 
 	private int countup = 1;
-	private Timer timer = new Timer();
+        
+        private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+                
 
 	public AquaductWebSocketHandler() {
 		super();
 		setFilter("/websocket/");
+                
+                scheduler.scheduleAtFixedRate(new Runnable() {
 
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				countup ++;
+                        @Override
+                        public void run() {
+                                countup ++;
 				WebClientFrame event  = new WebClientEvent("counter", countup);
 				sendEvent(event);
-			}
-		}, 100, 1000);
+                        }
+                }, 100, 1000, TimeUnit.MILLISECONDS);
+                
 	}
 
 	public void sendEvent(WebClientFrame event) {
