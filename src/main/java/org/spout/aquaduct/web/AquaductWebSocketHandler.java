@@ -20,11 +20,11 @@
 package org.spout.aquaduct.web;
 
 import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -36,26 +36,27 @@ import com.narrowtux.blueberry.websockets.TextFrame;
 import com.narrowtux.blueberry.websockets.WebSocketExchange;
 import com.narrowtux.blueberry.websockets.WebSocketRequestHandler;
 
+
 public class AquaductWebSocketHandler extends WebSocketRequestHandler {
 	private HashSet<WebSocketExchange> connectedClients = new HashSet<WebSocketExchange>();
 	private static final Gson GSON = new Gson();
 	private HashMap<String, WebClientRequestHandler> requestHandlers = new HashMap<String, WebClientRequestHandler>();
 
 	private int countup = 1;
-	private Timer timer = new Timer();
+	private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1); 
 
 	public AquaductWebSocketHandler() {
 		super();
 		setFilter("/websocket/");
 
-		timer.schedule(new TimerTask() {
+		scheduler.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
 				countup ++;
 				WebClientFrame event  = new WebClientEvent("counter", countup);
 				sendEvent(event);
 			}
-		}, 100, 1000);
+		}, 100, 1000, TimeUnit.MILLISECONDS);
 	}
 
 	public void sendEvent(WebClientFrame event) {
