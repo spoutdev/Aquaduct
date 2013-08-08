@@ -1,7 +1,7 @@
 /*
  * This file is part of Aquaduct.
  *
- * Copyright (c) 2012-2013, Spout LLC <http://www.spout.org/>
+ * Copyright (c) 2012 Spout LLC <http://www.spout.org/>
  * Aquaduct is licensed under the GNU Affero General Public License.
  *
  * Aquaduct is free software: you can redistribute it and/or modify
