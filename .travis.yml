@@ -1,0 +1,18 @@
+language: java
+jdk: oraclejdk7
+
+install: mvn package -DbuildNumber=$TRAVIS_BUILD_NUMBER -DciSystem=travis -Dcommit=${TRAVIS_COMMIT:0:7}
+after_success:
+  - "git clone -b travis `git config --get remote.origin.url` target/travis"
+  - "[[ \"$TRAVIS_BRANCH\" == \"master\" ]] && mvn deploy --settings target/travis/settings.xml"
+
+notifications:
+  email: false
+  webhooks:
+    - http://get.spout.org/hook
+    - http://n.tkte.ch/h/491/Vft7K5Sw11ODtddw7GvzNyWN
+
+env:
+  global:
+    - secure: "Q7qDK2ih2Vfq08CE/CHgf4NF1zHp4XREN6gTOSpv1d3HAVXvM6tZ0CoKRw0JPW5tGbgSDBz8xHsrhNgcRbojPBQdp0Yfzyd/njSAXTUAzv6KLF1Bld6OQtbUTmagbsFhbds0yT8A6cnNSSFAzJ7rk7zqW3PzkpCjM7Kx3UzZAoU="
+    - secure: "d0bQbTUADalFNgeq6Deym6wDH806nkCJRqu0D01MevTKRpA+ug9T68nCa5fIobHWyA41uID8a/9RLgrVbkISTF+Oh7giksV2wuReYBcJl2x+5o7Ld8CokyzadsgyLcEj1oWtZUdx9rYoyFqc4tEMMDdJHmQ8q/p75y5mNnPnU/M="
